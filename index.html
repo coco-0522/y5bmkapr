@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Y5 BMK EJAAN APR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=KaiTi&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Comic+Sans+MS&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue-theme: #E3F2FD; /* 浅蓝色 */
+  --pink-theme: #FCE4EC; /* 浅粉色 */
+  --purple-theme: #F3E5F5; /* 浅紫色 */
+  --green-theme: #E8F5E9; /* 浅绿色 */
+}
+body {
+  font-family: 'KaiTi', serif; /* 默认字体为楷体 */
+  background-color: #f7fafc; /* 页面背景色 */
+}
+.flashcard-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  padding: 20px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+@media (max-width: 768px) {
+  .flashcard-container {
+    grid-template-columns: 1fr;
+  }
+}
+.card-group {
+  padding: 20px;
+  border-radius: 12px;
+  display: none; /* 默认隐藏卡片组 */
+  background-color: white; /* 卡片组背景色 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 卡片组阴影 */
+}
+.group-1 { background-color: var(--blue-theme); }
+.group-2 { background-color: var(--pink-theme); }
+.group-3 { background-color: var(--purple-theme); }
+.group-4 { background-color: var(--green-theme); }
+.card {
+  width: 100%;
+  height: 200px;
+  margin: 15px auto;
+  perspective: 1000px;
+  cursor: pointer;
+}
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: white; /* 卡片背景色 */
+}
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  border-radius: 8px;
+  background: white;
+  font-size: 30px; /* 字体大小调整为30px */
+  word-wrap: break-word; /* 自动换行 */
+  overflow: hidden; /* 防止内容溢出 */
+  box-sizing: border-box; /* 确保内边距不影响尺寸 */
+}
+.card-front {
+  font-family: 'KaiTi', serif; /* 正面使用楷体 */
+}
+.card-back {
+  transform: rotateY(180deg);
+  font-family: 'Comic Sans MS', cursive; /* 背面使用Comic Sans MS */
+}
+.group-title {
+  font-weight: bold;
+  padding: 10px 0;
+  margin-bottom: 15px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  font-size: 36px; /* 标题字体大小调整为36px */
+  font-family: 'KaiTi', serif; /* 标题使用楷体 */
+  text-align: center; /* 标题居中 */
+}
+.button-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+  padding: 0 15px;
+}
+.button-container button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  color: black; /* 按钮字体颜色为黑色 */
+  cursor: pointer;
+  font-size: 20px; /* 按钮字体大小调整为20px */
+  font-family: 'Comic Sans MS', cursive; /* 按钮使用Comic Sans MS */
+  transition: background-color 0.3s ease; /* 按钮悬停效果 */
+}
+.button-container button.group-1-btn {
+  background-color: var(--blue-theme); /* 第一组按钮颜色 */
+}
+.button-container button.group-2-btn {
+  background-color: var(--pink-theme); /* 第二组按钮颜色 */
+}
+.button-container button.group-3-btn {
+  background-color: var(--purple-theme); /* 第三组按钮颜色 */
+}
+.button-container button.group-4-btn {
+  background-color: var(--green-theme); /* 第四组按钮颜色 */
+}
+.button-container button:hover {
+  opacity: 0.8; /* 按钮悬停效果 */
+}
+.instruction {
+  text-align: center;
+  margin: 15px 0;
+  color: #666;
+  font-size: 24px; /* 提示语字体大小调整为24px */
+  font-family: 'KaiTi', serif; /* 提示语使用楷体 */
+}
+</style>
+</head>
+<body class="min-h-screen bg-gray-50">
+<header class="bg-white shadow-sm py-4">
+  <div class="max-w-7xl mx-auto px-4">
+    <h1 class="text-3xl font-bold text-gray-900">Y5 BMK EJAAN APR</h1>
+    <p class="instruction">点击卡片将会有读音 Click the card to hear the pronunciation.</p>
+  </div>
+</header>
+<div class="button-container">
+  <button class="group-1-btn" onclick="toggleGroup('group-1')">8-14/4</button>
+  <button class="group-2-btn" onclick="toggleGroup('group-2')">15-21/4</button>
+  <button class="group-3-btn" onclick="toggleGroup('group-3')">22-28/4</button>
+  <button class="group-4-btn" onclick="toggleGroup('group-4')">1-7/4</button>
+</div>
+<div class="flashcard-container">
+  <!-- 8-14/4 -->
+  <section id="group-1" class="card-group group-1">
+    <h2 class="group-title">8-14/4</h2>
+    <div class="card"><div class="card-inner"><div class="card-front">鱼丸</div><div class="card-back">Bebola ikan</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">管形瓶、小药瓶</div><div class="card-back">Bebuli</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">万年青（一种植物）</div><div class="card-back">Deduit</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">卷状物</div><div class="card-back">Gegelung</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">铁花</div><div class="card-back">Kekisi</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">键盘</div><div class="card-back">Kekunci</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">棉花</div><div class="card-back">Kekabu</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">三角架</div><div class="card-back">Kekuda</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">蜘蛛</div><div class="card-back">Lelabah</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">肮脏的</div><div class="card-back">Comot-momot</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">（衣服）破烂</div><div class="card-back">Compang-camping</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">满是污迹</div><div class="card-back">Coreng-moreng</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">击打声或物件落的声音</div><div class="card-back">Debak-debuk</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">（心脏的）跳动声</div><div class="card-back">Degap-degup</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">影子</div><div class="card-back">Bebayang</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">半径、轮轴</div><div class="card-back">Jejari</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">肺</div><div class="card-back">Peparu</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">蜻蜓</div><div class="card-back">Pepatung</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">棚架</div><div class="card-back">Pepara</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">蝴蝶</div><div class="card-back">Rerama</div></div></div>
+  </section>
+
+  <!-- 15-21/4 -->
+  <section id="group-2" class="card-group group-2">
+    <h2 class="group-title">15-21/4</h2>
+    <div class="card"><div class="card-inner"><div class="card-front">蝉</div><div class="card-back">Reriang</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">毛细管</div><div class="card-back">Rerambut</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">直角尺、曲尺</div><div class="card-back">Sesiku</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">触角、触须、触手</div><div class="card-back">Sesungut</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">吹箭筒</div><div class="card-back">Sesumpit</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">滑鼠</div><div class="card-back">Tetikus</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">堤、岸</div><div class="card-back">Tetambak</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">房屋的骨架</div><div class="card-back">Tetulang</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">楔子</div><div class="card-back">Tetupai</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">鳖</div><div class="card-back">Lelabi</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">南瓜、长颈水壶</div><div class="card-back">Lelabu</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">风筝</div><div class="card-back">Lelayang</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">海豚</div><div class="card-back">Lelumba</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">网状物</div><div class="card-back">Jejala</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">爆竹声（连续的）</div><div class="card-back">Dentam-dentum</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">轰隆声</div><div class="card-back">Deram-derum</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">耳语声或谣言</div><div class="card-back">Desas-desus</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">吵闹的、吵杂的</div><div class="card-back">Gegak-gempita</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">漆黑</div><div class="card-back">Gelap-gelita</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">行为举止</div><div class="card-back">Gerak-geri</div></div></div>
+  </section>
+
+  <!-- 22-28/4 -->
+  <section id="group-3" class="card-group group-3">
+    <h2 class="group-title">22-28/4</h2>
+    <div class="card"><div class="card-inner"><div class="card-front">极亮的光、光辉的、灿烂的</div><div class="card-back">Gilang-gemilang</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">光辉洁白的、闪闪烁烁的</div><div class="card-back">Gilap-gemilap</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">匆匆忙忙</div><div class="card-back">Gopoh-gapah</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">群山</div><div class="card-back">Gunung-ganang</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">一部分</div><div class="card-back">Sebahagian</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">全部</div><div class="card-back">Semua</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">整个</div><div class="card-back">Seluruh</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">一切/所有</div><div class="card-back">Segala</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">一小部分</div><div class="card-back">Segelintir</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">全部</div><div class="card-back">Segenap</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">一部分</div><div class="card-back">Sebilangan</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">一些</div><div class="card-back">Sesetengah</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">全部</div><div class="card-back">Sekalian</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">们（复数后缀）</div><div class="card-back">Para</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">几年</div><div class="card-back">Bertahun-tahun</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">一半</div><div class="card-back">Setengah</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">一半</div><div class="card-back">Separuh</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">各种各样</div><div class="card-back">Berbagai-bagai</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">各种各样</div><div class="card-back">Pelbagai</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">各自</div><div class="card-back">Masing-masing</div></div></div>
+  </section>
+
+  <!-- 1-7/4 -->
+  <section id="group-4" class="card-group group-4">
+    <h2 class="group-title">1-7/4</h2>
+    <div class="card"><div class="card-inner"><div class="card-front">每</div><div class="card-back">Setiap</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">每</div><div class="card-back">Tiap-tiap</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">那三</div><div class="card-back">Ketiga-tiga</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">几十</div><div class="card-back">Berpuluh-puluh</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">几百</div><div class="card-back">Beratus-ratus</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">几千</div><div class="card-back">Beribu-ribu</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">几小时</div><div class="card-back">Berjam-jam</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">几天</div><div class="card-back">Berhari-hari</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">几周（口语：几个礼拜）</div><div class="card-back">Berminggu-minggu</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">几个月</div><div class="card-back">Berbulan-bulan</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">目的</div><div class="card-back">Tujuan</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">产生</div><div class="card-back">Melahirkan</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">显示</div><div class="card-back">Mewujudkan</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">拥有</div><div class="card-back">Mempunyai</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">还</div><div class="card-back">Memulangkan</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">称赞</div><div class="card-back">Memuji</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">科目</div><div class="card-back">Mata pelajaran</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">要求</div><div class="card-back">Meminta</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">传达</div><div class="card-back">Menyampaikan</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front">捡</div><div class="card-back">Mengutip</div></div></div>
+  </section>
+</div>
+<script>
+// 切换卡片组显示
+function toggleGroup(groupId) {
+  const group = document.getElementById(groupId);
+  group.style.display = group.style.display === "none" ? "block" : "none";
+}
+
+// 卡片交互功能
+document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('click', function() {
+    this.classList.toggle('flipped');
+    
+    // 根据当前显示的面播放对应的语言
+    if (this.classList.contains('flipped')) {
+      // 显示背面（马来文）
+      playAudio(this.querySelector('.card-back').textContent.trim(), 'ms');
+    } else {
+      // 显示正面（中文）
+      playAudio(this.querySelector('.card-front').textContent.trim(), 'zh');
+    }
+  });
+});
+
+// 语音播放功能
+function playAudio(text, lang) {
+  if (window.speechSynthesis) {
+    // 停止当前正在播放的语音
+    window.speechSynthesis.cancel();
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang === 'zh' ? 'zh-CN' : 'ms-MY';
+    
+    // 设置语音速率和音调
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+    
+    // 查找合适的语音
+    const voices = window.speechSynthesis.getVoices();
+    const preferredVoice = voices.find(voice => 
+      voice.lang === (lang === 'zh' ? 'zh-CN' : 'ms-MY'));
+    
+    if (preferredVoice) {
+      utterance.voice = preferredVoice;
+    }
+    
+    window.speechSynthesis.speak(utterance);
+  } else {
+    alert("您的浏览器不支持语音合成功能，请使用Chrome或Edge浏览器");
+  }
+}
+
+// 确保语音列表加载完成
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = function() {
+    // 语音列表已加载
+  };
+}
+</script>
+</body>
+</html>
